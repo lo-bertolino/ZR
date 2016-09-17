@@ -1,4 +1,3 @@
-//Begin page main
 int BoR;// 0 se sfera rossa, 1 se blu
 int fase,sottofase;
 float stato[12];
@@ -31,11 +30,8 @@ void ruota(){
 }
 
 bool outOfBounds (float* ptc){
-    if (fabsf(ptc[0])>0.75)
-        return true;
-    if (fabsf(ptc[1])>0.75)
-        return true;
-    if (fabsf(ptc[2])>0.75)
+    //fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75
+    if (!(fabsf(ptc[0])<0.75&&fabsf(ptc[1])<0.75&&fabsf(ptc[2])<0.75))
         return true;
     return false;
 }
@@ -51,12 +47,12 @@ void init(){
 
 void inizio(){
     api.getMyZRState(stato);//ottengo dati attuali
-	api.getOtherZRState(statoAvv);//ottengo dati avversario
-	for(int i=0;i<3;i++){
-	    pos[i]=stato[i];
-	    facing[i]=stato[i+6];
-	    posAvv[i]=statoAvv[i];
-	} //ottengo posizione e direzione miei e posizione avversario (magari poi anche direzione avversario)
+    api.getOtherZRState(statoAvv);//ottengo dati avversario
+    for(int i=0;i<3;i++){
+        pos[i]=stato[i];
+        facing[i]=stato[i+6];
+        posAvv[i]=statoAvv[i];
+    }//ottengo posizione e direzione miei e posizione avversario (magari poi anche direzione avversario)
 }
 void fine(){
     api.setDebug(debug);
@@ -71,11 +67,13 @@ void loop(){
                 game.dropSPS();
                 sottofase++;
                 game.getItemLoc(vai,1);
-            } else if (sottofase==1 && dist(vai,pos)<0.1){
+            }
+            else if (sottofase==1 && dist(vai,pos)<0.1){
                 game.dropSPS();
                 sottofase++;
                 game.getItemLoc(vai,2);
-            } else if(sottofase==2 && dist(vai,pos)<0.1){
+            }
+            else if(sottofase==2 && dist(vai,pos)<0.1){
                 game.dropSPS();
                 sottofase=0;
                 fase++;
@@ -92,5 +90,3 @@ void loop(){
 	
 	fine();
 }
-
-//End page main
