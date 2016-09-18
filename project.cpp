@@ -7,6 +7,7 @@ float punta[3];
 float posAvv[3];
 float pos[3];
 float facing[3];
+float vel[3];//velocità della sfera
 float debug[7];//7 variabili di debug, da usare
 float zona[4];//posizione e dimensione drop zone
 
@@ -38,18 +39,29 @@ void setPunta(float* v){
     punta[1]=v[1];
     punta[2]=v[2];
 }
-
+void setVec(float *v,float x,float y,float z){
+    v[0]=x;
+    v[1]=y;
+    v[2]=z;
+}
 
 void muovi(){
     if (oOB(pos))setVai(0,0,0);
     float d=dist(vai,pos);
-    float vec; mathVecSubtract(vec,vai,pos,3);
-    if (d>0.2) api.setVelocityTarget(vec);
-    else api.setPositionTarget(vai);
+    if (d<0.1)
+        frena(d);
+    else{
+        float vec; mathVecSubtract(vec,vai,pos,3);
+        if (d>0.2) api.setVelocityTarget(vec);
+        else api.setPositionTarget(vai);
+    }
 }
 
-void frena(){
-    
+void frena(float p){
+    float f[3];
+    p*=10;
+    setVec(f,0-vel[0]*p,0-vel[1]*p,0-vel[2]*p);
+    api.setAttitudeTarget(f);
 }
 
 void ruota(){
@@ -77,6 +89,7 @@ void inizio(){
     api.getOtherZRState(statoAvv);//ottengo dati avversario
     for(int i=0;i<3;i++){
         pos[i]=stato[i];
+        vel[i]=stato[i+3];
         facing[i]=stato[i+6];
         posAvv[i]=statoAvv[i];
     }//ottengo posizione e direzione miei e posizione avversario (magari poi anche direzione avversario)
