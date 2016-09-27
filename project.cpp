@@ -4,7 +4,7 @@ float speed;
 float stato[12];
 float statoAvv[12];
 float vai[3];
-float punta[3];
+float punta[3];//sostituisce next[] di Oddo
 float posAvv[3];
 float pos[3];
 float facing[3];
@@ -41,7 +41,12 @@ void frena(){       //To do  --Utile per evitare parabola
 }
 
 void ruota(){   //Definitivo
-    api.setAttRateTarget(punta);
+
+void Ruota(){
+	float v[3];
+	mathVecSubstract(v,punta,pos,3);
+	mathVecNormailize(v,3);
+	api.setAttitudeTarget(v);
 }
 
 bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
