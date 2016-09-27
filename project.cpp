@@ -33,7 +33,7 @@ void muovi(){       //To do
     if (oOB(pos))for(int i=0;i<3;i++)vai[i]=0;
     float d=dist(vai,pos);
     float vec[3]; mathVecSubtract(vec,vai,pos,3);
-    if (d>0.50) api.setVelocityTarget(vec);
+    if (d>0.48) api.setVelocityTarget(vec);
     else api.setPositionTarget(vai);
     if (d<0.10)
     frena();
