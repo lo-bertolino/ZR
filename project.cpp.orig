@@ -89,6 +89,7 @@ void loop(){
     inizio();
     switch(fase){
         case 0://drop SPSs, i cosi per sapere dove si trova la zhohona
+<<<<<<< lo98be-movement-1
         if (sottofase==0 && dist(vai,pos)<0.1){
             game.dropSPS();
             sottofase++;
@@ -104,6 +105,23 @@ void loop(){
             sottofase=0;
             fase++;
         }
+=======
+            if (sottofase==0 && dist(vai,pos)<0.1){
+                game.dropSPS();
+                sottofase++;
+                game.getItemLoc(vai,1);
+            }
+            else if (sottofase==1 && dist(vai,pos)<0.1){
+                game.dropSPS();
+                sottofase++;
+                game.getItemLoc(vai,2);
+            }
+            else if(sottofase==2 && dist(vai,pos)<0.1){
+                game.dropSPS();
+                sottofase=0;
+                fase++;
+            }
+>>>>>>> Movimento L-L v.2
         break;
         case 1://getZone
         if(!game.getZone(zona)){//se true, carica anche la posizione della sfera in zona
