@@ -41,8 +41,6 @@ void frena(){       //To do  --Utile per evitare parabola
 }
 
 void ruota(){   //Definitivo
-
-void Ruota(){
 	float v[3];
 	mathVecSubstract(v,punta,pos,3);
 	mathVecNormailize(v,3);
