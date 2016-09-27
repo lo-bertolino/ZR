@@ -2,6 +2,7 @@ int BoR;// 0 se sfera rossa, 1 se blu
 int fase,sottofase;
 float speed;
 float stato[12];
+float vel[3];
 float statoAvv[12];
 float vai[3];
 float punta[3];//sostituisce next[] di Oddo
@@ -29,11 +30,6 @@ float dist(float* a,float* b){  //Definitivo
     mathVecSubtract(v, a, b, 3);
     return mathVecMagnitude(v, 3);
 }
-void setV(float *v,float *c){
-    v[0]=c[0];
-    v[1]=c[1];
-    v[2]=c[2];
-}
 
 void muovi(){       //To do
     if (oOB(pos))for(int i=0;i<3;i++)vai[i]=0;
@@ -41,16 +37,8 @@ void muovi(){       //To do
     float vec[3]; mathVecSubtract(vec,vai,pos,3);
     if (d>0.50) api.setVelocityTarget(vec);
     api.setPositionTarget(vai);
-}
-//doesnt work
-void frena(float p){
-    DEBUG(("frena\n"));
-    float f[3];
-    p*=10;
-    if(p>1){
-    setV(f,0-vel[0]*p,0-vel[1]*p,0-vel[2]*p);
-    api.setAttitudeTarget(f);}
-    else api.setPositionTarget(vai);
+    if (d<0.25)
+    frena();
 }
 
 void frena(){       //To do  --Utile per evitare parabola
@@ -91,10 +79,10 @@ void inizio(){
     speed=mathVecMagnitude(vel,3);
 }
 void fine(){
-    setV(debug,vai);
-    debug[3]=speed;
     api.setDebug(debug);
-    ruota();//ordine di rotazione verso punta[]
+	ruota();//ordine di rotazione verso punta[]
+	muovi();//ordine di spostamento verso vai[]
+}
     muovi();//ordine di spostamento verso vai[]
 }
 void loop(){
