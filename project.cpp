@@ -34,7 +34,10 @@ void frena(){       //To do  --Utile per evitare parabola
 }
 
 void ruota(){
-    api.setAttRateTarget(punta);
+	float v[3];
+	mathVecSubstract(v,punta,pos,3);
+	mathVecNormailize(v,3);
+	api.setAttitudeTarget(v);
 }
 
 bool oOB (float ptc[]){//outOfBounds, Definitivo, Eliminabile se serve spazio
