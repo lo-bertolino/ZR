@@ -12,18 +12,18 @@ float facing[3];
 float debug[7];//7 variabili di debug, da usare
 float zona[4];//posizione e dimensione drop zone
 
-void setV(float v[],float x,float y,float z){ //Definitivo
+void setV(float *v,float x,float y,float z){ //Definitivo
     v[0]=x;
     v[1]=y;
     v[2]=z;
 }
-void setV(float v[],float c[]){ //Definitivo
+void setV(float *v,float *c){ //Definitivo
     v[0]=c[0];
     v[1]=c[1];
     v[2]=c[2];
 }
 
-float dist(float a[],float b[]){  //Definitivo
+float dist(float* a,float* b){  //Definitivo
     float v[3];
     mathVecSubtract(v, a, b, 3);
     return mathVecMagnitude(v, 3);
@@ -34,8 +34,8 @@ void muovi(){       //To do
     float d=dist(vai,pos);
     float vec[3]; mathVecSubtract(vec,vai,pos,3);
     if (d>0.50) api.setVelocityTarget(vec);
-    api.setPositionTarget(vai);
-    if (d<0.25)
+    else api.setPositionTarget(vai);
+    if (d<0.10)
     frena();
 }
 
@@ -47,7 +47,7 @@ void ruota(){   //Definitivo
     api.setAttRateTarget(punta);
 }
 
-bool oOB (float ptc[]){//outOfBounds, Definitivo, Eliminabile se serve spazio
+bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
     if(fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75)
         return true;
     return false;
@@ -85,12 +85,12 @@ void loop(){
             if (sottofase==0 && dist(vai,pos)<0.1){
                 game.dropSPS();
                 sottofase++;
-                setV(vai,0.7,0.7,0);
+                game.getItemLoc(vai,1);
             }
             else if (sottofase==1 && dist(vai,pos)<0.1){
                 game.dropSPS();
                 sottofase++;
-                setV(vai,-0.7,0.7,0);
+                game.getItemLoc(vai,2);
             }
             else if(sottofase==2 && dist(vai,pos)<0.1){
                 game.dropSPS();
