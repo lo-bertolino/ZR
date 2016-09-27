@@ -14,18 +14,18 @@ float speed;//velocità (modulo)
 float debug[7];//7 variabili di debug, da usare
 float zona[4];//posizione e dimensione drop zone
 
-void setV(float *v,float x,float y,float z){ //Definitivo
+void setV(float v[],float x,float y,float z){ //Definitivo
     v[0]=x;
     v[1]=y;
     v[2]=z;
 }
-void setV(float *v,float *c){ //Definitivo
+void setV(float v[],float c[]){ //Definitivo
     v[0]=c[0];
     v[1]=c[1];
     v[2]=c[2];
 }
 
-float dist(float* a,float* b){  //Definitivo
+float dist(float a[],float b[]){  //Definitivo
     float v[3];
     mathVecSubtract(v, a, b, 3);
     return mathVecMagnitude(v, 3);
@@ -52,7 +52,7 @@ void ruota(){   //Definitivo
 	api.setAttitudeTarget(v);
 }
 
-bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
+bool oOB (float ptc[]){//outOfBounds, Definitivo, Eliminabile se serve spazio
     if(fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75)
         return true;
     return false;
