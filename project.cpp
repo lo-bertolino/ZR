@@ -1,5 +1,6 @@
 int BoR;// 0 se sfera rossa, 1 se blu
 int fase,sottofase;
+float speed;
 float stato[12];
 float statoAvv[12];
 float vai[3];
@@ -10,28 +11,41 @@ float facing[3];
 float debug[7];//7 variabili di debug, da usare
 float zona[4];//posizione e dimensione drop zone
 
-float dist(float* a,float* b){
-    return sqrt(mathSquare(a[0]-b[0])+mathSquare(a[1]-b[1])+mathSquare(a[2]-b[2]));
+void setV(float *v,float x,float y,float z){ //Definitivo
+    v[0]=x;
+    v[1]=y;
+    v[2]=z;
+}
+void setV(float *v,float *c){ //Definitivo
+    v[0]=c[0];
+    v[1]=c[1];
+    v[2]=c[2];
 }
 
-void muovi(){
-        float d=dist(vai,pos);
-        float vec; mathVecSubtract(vec,vai,pos,3);
-        if (d>0.4) api.setVelocityTarget(vec);
-        else api.setPositionTarget(targetPoint);
+float dist(float* a,float* b){  //Definitivo
+    float v[3];
+    mathVecSubtract(v, a, b, 3);
+    return mathVecMagnitude(v, 3);
 }
 
-void frena(){
-    
+void muovi(){       //To do
+    if (oOB(pos))for(int i=0;i<3;i++)vai[i]=0;
+    float d=dist(vai,pos);
+    float vec[3]; mathVecSubtract(vec,vai,pos,3);
+    if (d>0.50) api.setVelocityTarget(vec);
+    api.setPositionTarget(vai);
 }
 
-void ruota(){
+void frena(){       //To do  --Utile per evitare parabola
+    api.setPositionTarget(pos);
+}
+
+void ruota(){   //Definitivo
     api.setAttRateTarget(punta);
 }
 
-bool outOfBounds (float* ptc){
-    //fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75
-    if (!(fabsf(ptc[0])<0.75&&fabsf(ptc[1])<0.75&&fabsf(ptc[2])<0.75))
+bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
+    if(fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75)
         return true;
     return false;
 }
