@@ -58,6 +58,49 @@ bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
     return false;
 }
 
+bool dock(int ID) {
+    float ID_pos[3]; //Posizzione dell'oggetto 
+    float  dist_id_pos; //Distanza dall'oggetto
+    if(ID < 0 || ID > 5) return false; //Verifica validità ID 
+    getItemLoc(ID_pos, ID); //Posizione dell'oggetto
+    dist_id_pos = dist(ID_pos, pos); //Distanza dall'oggetto 
+    switch(ID) {
+        case 0: case 1: //LARGE
+            if(dist_id_pos < 0.151) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false; break; 
+            }
+            if(dist_id_pos > 0.173) {
+                DEBUG(("DOCKING: Troppo lontani")); 
+                return false; break; 
+            }
+        case 2: case 3: //MEDIUM
+            if(dist_id_pos < 0.138) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false; break; 
+            }
+            if(dist_id_pos > 0.160) {
+                DEBUG(("DOCKING: Troppo lontani"));
+                return false; break; 
+            }
+        case 4: case 5: //LARGE
+            if(dist_id_pos < 0.124) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false; break; 
+            }
+            if(dist_id_pos > 0.146) {
+                DEBUG(("DOCKING: Troppo lontani"));
+                return false; break; 
+            }
+    }
+    if(speed > 0.01) { 
+        DEBUG(("DOCKING: Velocità troppo elevata")); 
+        return false; 
+    }
+    
+    
+}
+
 void init(){
 	for(int i=0;i<7;i++)debug[i]=0;
 	for(int i=0;i<3;i++)vai[i]=punta[i]=0;
@@ -75,6 +118,7 @@ void inizio(){
         vel[i]=stato[i+3];
         facing[i]=stato[i+6];
         posAvv[i]=statoAvv[i];
+        vel[i]=stato[i+3];
     }//ottengo posizione e direzione miei e posizione avversario (magari poi anche direzione avversario)
     speed=mathVecMagnitude(vel,3);
 }
@@ -82,8 +126,6 @@ void fine(){
     api.setDebug(debug);
 	ruota();//ordine di rotazione verso punta[]
 	muovi();//ordine di spostamento verso vai[]
-}
-    muovi();//ordine di spostamento verso vai[]
 }
 void loop(){
     inizio();
