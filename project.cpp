@@ -13,6 +13,56 @@ float speed;//velocità (modulo)
 float debug[7];//7 variabili di debug, da usare
 float zona[4];//posizione e dimensione drop zone
 
+<<<<<<< HEAD
+float dist(float* a,float* b){
+    //return sqrt(mathSquare(a[0]-b[0])+mathSquare(a[1]-b[1])+mathSquare(a[2]-b[2]));
+    float v[]={0,0,0}; mathVecSubtract(v, a, b, 3);
+    return mathVecMagnitude(v, 3);
+}
+
+//imposta pi� facilmente le direzioni (meno errori)
+void setV(float *v,float x,float y,float z){
+    v[0]=x;
+    v[1]=y;
+    v[2]=z;
+}
+void setV(float *v,float *c){
+    v[0]=c[0];
+    v[1]=c[1];
+    v[2]=c[2];
+}
+
+void muovi(){
+    if (oOB(pos))setV(vai,0,0,0);
+    float d=dist(vai,pos);
+    DEBUG(("%f muovi\n",d));
+    if (d<0.2)
+        frena(d);
+    else{
+        DEBUG(("verso @vai\n"));
+        float vec[3]; mathVecSubtract(vec,vai,pos,3);
+        api.setVelocityTarget(vec);
+    }
+}
+//doesnt work
+void frena(float p){
+    DEBUG(("frena\n"));
+    float f[3];
+    p*=10;
+    if(p>1){
+    setV(f,0-vel[0]*p,0-vel[1]*p,0-vel[2]*p);
+    api.setAttitudeTarget(f);}
+    else api.setPositionTarget(vai);
+}
+
+void ruota(){
+    //api.setAttRateTarget(punta);
+}
+
+bool oOB (float* ptc){//outOfBounds
+    //fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75
+    if (!(fabsf(ptc[0])<0.75&&fabsf(ptc[1])<0.75&&fabsf(ptc[2])<0.75))
+=======
 void setV(float *v,float x,float y,float z){ //Definitivo
     v[0]=x;
     v[1]=y;
@@ -66,6 +116,7 @@ void ruota(){   //Definitivo
 
 bool oOB (float* ptc){//outOfBounds, Definitivo, Eliminabile se serve spazio
     if(fabsf(ptc[0])>0.75||fabsf(ptc[1])>0.75||fabsf(ptc[2])>0.75)
+>>>>>>> bf538908989afce942862193f10c1a8c0cb48e01
         return true;
     return false;
 }

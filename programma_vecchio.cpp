@@ -33,9 +33,10 @@ void spostamento(){
 //Begin page PuntaAvversario
 void puntaAvversario(){
     if(!upLoad){
-        mathVecSubtract(vectorBetween,otherPos,myPos,3);
-        mathVecNormalize(vectorBetween,3);
-        api.setAttitudeTarget(vectorBetween);
+        float* v;
+        mathVecSubtract(v,otherPos,myPos,3);
+        mathVecNormalize(v,3);
+        api.setAttitudeTarget(v);
     }
 }
 //End page PuntaAvversario
@@ -61,12 +62,12 @@ void upload() {//Quasi OK
 }
 //End page Upload
 //Begin page checkOutOfBounds
-bool outOfBounds (float posToCheck[]){//OK
-    if (fabsf(posToCheck[0])>7.5)
+bool outOfBounds (float ptc[]){//OK
+    if (fabsf(ptc[0])>7.5)
         return true;
-    if (fabsf(posToCheck[1])>0.6)
+    if (fabsf(ptc[1])>0.6)
         return true;
-    if (fabsf(posToCheck[2])>0.6)
+    if (fabsf(ptc[2])>0.6)
         return true;
     return false;
 }
