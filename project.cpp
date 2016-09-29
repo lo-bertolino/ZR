@@ -1,11 +1,9 @@
 char BoR; // R se sfera rossa, B se blu
 int fase,sottofase;
-float speed;
 float stato[12];
-float vel[3];
 float statoAvv[12];
 float vai[3];
-float punta[3];//sostituisce next[] di Oddo
+float punta[3];
 float posAvv[3];
 float pos[3];
 float facing[3];
@@ -34,8 +32,8 @@ bool oOB(float ptc[])/*Definitivo*/{
 
 void ruota()/*Definitivo*/{
 	float v[3];
-	mathVecSubstract(v,punta,pos,3);
-	mathVecNormailize(v,3);
+	mathVecSubtract(v,punta,pos,3);
+	mathVecNormalize(v,3);
 	api.setAttitudeTarget(v);
 }
 
@@ -58,7 +56,7 @@ void muovi(){
 
 int checkDock(int id)/*boh*/{
 	float targ[3];
-	getItemLoc(targ,ID); //Posizione dell'oggetto
+	game.getItemLoc(targ,id); //Posizione dell'oggetto
 	float targD = dist(targ,pos); //Distanza dall'oggetto 
 	if(((id == 0 || id == 1) && targD < 0.151) ||
 	((id == 2 || id == 3) && targD < 0.138) ||
@@ -85,7 +83,6 @@ void dock(int id){
 }
 
 void init(){
-	for(int i = 0; i < 7; i++)debug[i] = 0;
 	for(int i = 0; i < 3; i++)vai[i] = punta[i] = 0;
 	api.getMyZRState(stato);
 	BoR = stato[1] > 0 ? 'R' : 'B'; //capisco quale sfera siamo
