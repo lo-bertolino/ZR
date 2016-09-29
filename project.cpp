@@ -1,9 +1,11 @@
 char BoR; // R se sfera rossa, B se blu
 int fase,sottofase;
+float speed;
 float stato[12];
+float vel[3];
 float statoAvv[12];
 float vai[3];
-float punta[3];
+float punta[3];//sostituisce next[] di Oddo
 float posAvv[3];
 float pos[3];
 float facing[3];
