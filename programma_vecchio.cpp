@@ -1,14 +1,3 @@
-//Begin page main
-//Begin page CHAT :)
-/*
-//
-
-
-
-
-
-*/
-//End page CHAT :)
 //Begin page Distanza
 float distanza(float A[], float B[]){
     mathVecSubtract(vectorBetween, A, B, 3);
@@ -31,31 +20,23 @@ void Foto(){
 }
 //End page Foto
 //Begin page Muovi
-void spostamento()
-{
-    if(step==0)
-    {
+void spostamento(){
+    if(step==0){
        mathVecSubtract(vectorBetween,targetPoint,myPos,3);
        if (mathVecMagnitude(vectorBetween,3)>0.75)
-       {
            api.setVelocityTarget(vectorBetween);
-       }
-       else 
-       {
-           api.setPositionTarget(targetPoint);
-       }
+       else api.setPositionTarget(targetPoint);
     }
-    else
-       api.setPositionTarget(targetPoint);
+    else api.setPositionTarget(targetPoint);
 }
-
 //End page Muovi
 //Begin page PuntaAvversario
 void puntaAvversario(){
     if(!upLoad){
-        mathVecSubtract(vectorBetween,otherPos,myPos,3);
-        mathVecNormalize(vectorBetween,3);
-        api.setAttitudeTarget(vectorBetween);
+        float* v;
+        mathVecSubtract(v,otherPos,myPos,3);
+        mathVecNormalize(v,3);
+        api.setAttitudeTarget(v);
     }
 }
 //End page PuntaAvversario
@@ -81,12 +62,12 @@ void upload() {//Quasi OK
 }
 //End page Upload
 //Begin page checkOutOfBounds
-bool outOfBounds (float posToCheck[]){//OK
-    if (fabsf(posToCheck[0])>7.5)
+bool outOfBounds (float ptc[]){//OK
+    if (fabsf(ptc[0])>7.5)
         return true;
-    if (fabsf(posToCheck[1])>0.6)
+    if (fabsf(ptc[1])>0.6)
         return true;
-    if (fabsf(posToCheck[2])>0.6)
+    if (fabsf(ptc[2])>0.6)
         return true;
     return false;
 }
@@ -130,29 +111,22 @@ upLoad=false;
 }
 
 void loop(){
-    
     ogniSecondo();
-    if(game.getCurrentTime()==0)
-    {
+    if(game.getCurrentTime()==0){
         game.getItemLoc(oggetto,7);
         game.getItemLoc(oggetto1,8);
         if(distanza(myPos,oggetto)>distanza(myPos,oggetto1))
-        {
             strategia[1]=8;  
-        }
     }
-    if (step<2) 
-    {
+    if (step<2) {
         game.getItemLoc(oggetto,strategia[step]);
         if (game.hasItem(strategia[step])==-1) 
             game.getItemLoc(targetPoint,strategia[step]);
         else      
             step++;
     } 
-    else 
-    {
-        if(step==2)
-        {
+    else {
+        if(step==2){
              if(game.getLightSwitchTime()==0)
                   Time_of_Mirror=Time_of_Mirror+1;//Quando siamo verso la fine del gioco lo usiamo non prima
              if(game.posInDark(otherPos) && Time_of_Mirror==2){
@@ -160,36 +134,27 @@ void loop(){
                  targetPoint[1]=-0.2f;     
                  targetPoint[2]=-0.5f;
              }
-             else
-             {
-                   if(strategia[0]==8)
-                   {
+             else{
+                   if(strategia[0]==8){
                        targetPoint[0]=myPos[0];
                        targetPoint[1]=myPos[1];
                        targetPoint[2]=targetPoint[2]+0.1;
                    }
                     
  //__________________________Strategie diverse____________________________________________
-                   if(strategia[0]==7)
-                   {
-                       if(myPos[0]<-0.45 || myPos[1]<0.55)
-                       {
+                   if(strategia[0]==7){
+                       if(myPos[0]<-0.45 || myPos[1]<0.55){
                            targetPoint[0]=-0.5f;
                            targetPoint[1]=0.6f;
                            targetPoint[2]=-0.58f;
                        }
-                       else
-                       {
+                       else{
                            if(otherPos[1]>0.5 && otherPos[2]>0)
-                           {
                                myPos[1]=myPos[1]-0.5f;
-                           }
                            if(otherPos[0]>-0.4 && otherPos[2]>0)
-                           {
                                myPos[0]=myPos[0]-0.4f;
-                           }
                        }
-                    }
+                   }
              }
         }
     }
@@ -226,7 +191,4 @@ void ogniSecondo(){
     Foto();
     upload();
 }
-
 //End page ogniSecondo
-
-//End page main
