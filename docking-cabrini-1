@@ -1,0 +1,49 @@
+bool dock(int ID) {
+    float ID_pos[3]; //Posizzione dell'oggetto 
+    float  dist_id_pos; //Distanza dall'oggetto
+    if(ID < 0 || ID > 5) return false; //Verifica validità ID 
+    getItemLoc(ID_pos, ID); //Posizione dell'oggetto
+    dist_id_pos = dist(ID_pos, pos); //Distanza dall'oggetto 
+    switch(ID) {
+        case 0: case 1: //LARGE
+            if(dist_id_pos < 0.151) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false; 
+            }
+            if(dist_id_pos > 0.173) {
+                DEBUG(("DOCKING: Troppo lontani")); 
+                return false;
+            }
+            break;
+        case 2: case 3: //MEDIUM
+            if(dist_id_pos < 0.138) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false;
+            }
+            if(dist_id_pos > 0.160) {
+                DEBUG(("DOCKING: Troppo lontani"));
+                return false;
+            }
+            break;
+        case 4: case 5: //LARGE
+            if(dist_id_pos < 0.124) {
+                DEBUG(("DOCKING: Troppo vicini")); 
+                return false;
+            }
+            if(dist_id_pos > 0.146) {
+                DEBUG(("DOCKING: Troppo lontani"));
+                return false;
+            }
+            break;
+    }
+    if(speed > 0.01) { 
+        DEBUG(("DOCKING: Velocità troppo elevata")); 
+        return false; 
+    }
+    if(dockItem(ID)) 
+        return true; 
+    else {
+        DEBUG(("DOCKING: docking fallito -0.3pt")); 
+        return false; 
+    }
+}
