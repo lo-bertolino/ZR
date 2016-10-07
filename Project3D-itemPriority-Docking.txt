@@ -130,7 +130,7 @@ void dock(int id){
 }
 
 void init(){
-	for(int i = 0; i < 3; i++)vai[i] = /*punta[i] =*/ 0;
+	for(int i = 0; i < 3; i++) vai[i] =  0;
 	api.getMyZRState(stato);
 	BoR = stato[1] > 0 ? 'R' : 'B'; //capisco quale sfera siamo
 	fase = sottofase = 0;
@@ -153,7 +153,7 @@ void inizio(){
 }
 
 void fine(){
-	ruota(); //rotazione verso punta[]
+	ruota(); //rotazione verso vai[]
 	muovi(); //spostamento verso vai[]
 }
 
@@ -230,6 +230,8 @@ void loop(){
     else if(spsAllDrop){
         game.getZone(zona);
         setV(vai, zona);
+		if(dist(pos,vai) < 0.19)
+          game.dropItem();
     }
 	fine();
 }
