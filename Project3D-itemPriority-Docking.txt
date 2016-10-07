@@ -115,7 +115,6 @@ void dock(int id){
     switch (checkDock(id)){
         case 0:
           game.dockItem();
-          DEBUG(("ItemPickedUp"));
           break;
         case 1:
           allontana();
