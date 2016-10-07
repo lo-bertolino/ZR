@@ -236,5 +236,6 @@ void loop(){
 		if(dist(pos,vai) < 0.19)
           game.dropItem();
     }
+        itemPriority();
 	fine();
 }
