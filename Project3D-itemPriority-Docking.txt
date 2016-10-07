@@ -198,7 +198,7 @@ void loop(){
     inizio();
 	switch(fase){
         case 0://drop SPSs, i cosi per sapere dove si trova la zhohona
-            if (sottofase==0 && dist(vai,pos)<0.1){
+            if (sottofase==0){
                 game.dropSPS();
                 sottofase++;
                 setV(vai, -0.3, -0.5, 0);
