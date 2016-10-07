@@ -54,9 +54,11 @@ bool oOB(float ptc[])/*Definitivo*/{
 
 void ruota()/*Definitivo*/{
 	float v[3];
-	mathVecSubtract(v,vai,pos,3);
-	mathVecNormalize(v,3);
-	api.setAttitudeTarget(v);
+	if(spsAllDrop){ //per risparmiare carburante
+	  mathVecSubtract(v,vai,pos,3);
+	  mathVecNormalize(v,3);
+	  api.setAttitudeTarget(v);
+	}
 }
 
 void muovi(){
