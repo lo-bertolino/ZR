@@ -122,10 +122,11 @@ void dock(int id){
           break;
         case 2:
           avvicina();
+	  break;
         case 3:
           api.setPositionTarget(pos);
           break;
-        default: DEBUG (("ERRORE"));
+        default: DEBUG (("ERRORE")); break;
     }
 }
 
