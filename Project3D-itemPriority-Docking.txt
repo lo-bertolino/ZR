@@ -3,6 +3,7 @@ int fase,sottofase;
 float stato[12];
 float statoAvv[12];
 float vai[3];
+float punta[3];
 float posAvv[3];
 float pos[3];
 float facing[3];
@@ -49,13 +50,15 @@ void setV(float v[],float x,float y,float z)/*Definitivo*/{
 }
 
 bool oOB(float ptc[])/*Definitivo*/{
-	return fabsf(ptc[0]) > 0.75 || fabsf(ptc[1]) > 0.75 || fabsf(ptc[2]) > 0.75;
+	if((fabsf(ptc[0]) > 0.75) || (fabsf(ptc[1]) > 0.75) || (fabsf(ptc[2]) > 0.75))
+      return true;
+    return false;
 }
 
-void ruota()/*Definitivo*/{
+void ruota(){
 	float v[3];
-	if(spsAllDrop){ //per risparmiare carburante
-	  mathVecSubtract(v,vai,pos,3);
+	if(spsAllDrop && dist(pos,vai) < 0.5){//per risparmiare fuel
+	  mathVecSubtract(v,punta,pos,3);
 	  mathVecNormalize(v,3);
 	  api.setAttitudeTarget(v);
 	}
@@ -76,16 +79,15 @@ void muovi(){
 		      if(d > 0.267)
 		        api.setPositionTarget(vai);
 		      else 
-		        api.setPositionTarget(pos);break;
+		        api.setPositionTarget(pos);
+		    break;
 		    case false:	
 		      if(d > 0.50)
 			    api.setVelocityTarget(vec);
-		      
 		      api.setPositionTarget(vai);
-		      
 		      if(d < 0.13)
 			    api.setPositionTarget(pos); //sostituisce frena())
-			  break;
+			break;
 		}
 	}
 }
@@ -117,25 +119,25 @@ void dock(int id){
     switch (checkDock(id)){
         case 0:
           game.dockItem();
-          break;
+        break;
         case 1:
           allontana();
-          break;
+        break;
         case 2:
-          if(dist(pos,vai) < 0.19)
+          if(dist(pos,punta) < 0.4)
             avvicina();
           else
             api.setPositionTarget(vai);
-	  break;
+        break;
         case 3:
           api.setPositionTarget(pos);
-          break;
+        break;
         default: DEBUG (("ERRORE")); break;
     }
 }
 
 void init(){
-	for(int i = 0; i < 3; i++) vai[i] =  0;
+	for(int i = 0; i < 3; i++)vai[i] = punta[i] = 0;
 	api.getMyZRState(stato);
 	BoR = stato[1] > 0 ? 'R' : 'B'; //capisco quale sfera siamo
 	fase = sottofase = 0;
@@ -158,7 +160,7 @@ void inizio(){
 }
 
 void fine(){
-	ruota(); //rotazione verso vai[]
+	ruota(); //rotazione verso punta[]
 	muovi(); //spostamento verso vai[]
 }
 
@@ -171,24 +173,24 @@ int itemPriority(){
     int i=0;
     
     if(LARGE == false)
-      i+=2;                                  //0-1 sono i large, 2-3 i medium e 4-5 gli small, per quello incremento i così
+      i+=2;              //0-1 sono i large, 2-3 i medium e 4-5 gli small, per quello incremento i così
     if(MEDIUM == false)
       i+=2;
     if(SMALL == false){
-      MEDIUM = true;                         //se ho preso anche uno small, passo di nuovo al medium e poi all'altro small
+      MEDIUM = true;     //se ho preso anche uno small, passo di nuovo al medium e poi all'altro small
       i=2;
     }
     
-    if(i==0 && game.hasItemBeenPickedUp(i))
+    if(i==0 && (game.hasItemBeenPickedUp(i) || game.hasItemBeenPickedUp(i+1)))
       LARGE = false;
-    if(i==2 && game.hasItemBeenPickedUp(i))
+    if(i==2 && (game.hasItemBeenPickedUp(i) || game.hasItemBeenPickedUp(i+1)))
       MEDIUM = false;
-    if(i==4 && game.hasItemBeenPickedUp(i))
+    if(i==4 && (game.hasItemBeenPickedUp(i) || game.hasItemBeenPickedUp(i+1)))
       SMALL = false;
       
     game.getItemLoc(d,i);
     game.getItemLoc(d1,(i+1));
-    if((dist(pos, d)+dist(d, zona)) > (dist(pos, d1)+dist(d1, zona))){    //restituisce l'id dell'item più conveniente da andare a prendere
+    if((dist(pos, d)+dist(d, zona)) > (dist(pos, d1)+dist(d1, zona)) && game.hasItemBeenPickedUp(i+1)){    //restituisce l'id dell'item più conveniente da andare a prendere
        return (i+1);
     }else
        return i;
@@ -226,18 +228,20 @@ void loop(){
         default:
         DEBUG(("ERROR"));
 	}
-	if(spsAllDrop == true && game.hasItem(ID)==0){
+	if(spsAllDrop == true && game.hasItem(ID) == 0){
           ID = itemPriority();
           DEBUG (("ID: %d", ID));
-          game.getItemLoc(vai,ID);
+          game.getItemLoc(vai, ID);
+          game.getItemLoc(punta, ID);
           dock(ID);
     }
     else if(spsAllDrop){
         game.getZone(zona);
         setV(vai, zona);
-		if(dist(pos,vai) < 0.19)
+        setV(punta, vai);
+        if(dist(pos,vai) < 0.185)
           game.dropItem();
     }
-        itemPriority();
+    itemPriority();
 	fine();
 }
